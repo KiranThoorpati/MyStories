@@ -6,6 +6,8 @@ Request number: PRB0049658
 
 Purpose: Business wanted this tables in EDP for their reports.
 
+బిజినెస్ వాళ్లు వారి రిపోర్ట్స్ కోసం ఈ టేబుల్స్‌ను EDP లో కావాలని అడిగారు.
+
 File specs:
 
 ICD10cm_Codes_All_yyyy_MM_dd.txt
@@ -34,6 +36,39 @@ ICD10cm_Conversions
 
 View schema: HealthPlanSHPRevenueManagement
 
+ఇవి ఫైల్ వివరాలు:
+
+**ఫైల్ పేర్లు:**
+
+* ICD10cm_Codes_All_yyyy_MM_dd.txt
+* ICD10cm_codes_chronic_condition_indicators_yyyy_MM_dd.txt
+* ICD10cm_Conversions_yyyy_MM_dd.txt
+
+**ఫార్మాట్:** txt (Pipe తో విడదీసిన ఫైల్)
+**టైమ్ స్టాంప్ ఫార్మాట్:** yyyy_MM_dd
+
+**EDP వివరాలు:**
+
+**బేస్ టేబుల్ పేర్లు:**
+
+* ICD10cm_Codes_All
+* ICD10cm_codes_chronic_condition_indicators
+* ICD10cm_Conversions
+
+**బేస్ స్కీమా పేరు:**
+
+* healthplan_shp_revenuemanagement
+
+**వ్యూ పేర్లు:**
+
+* ICD10cm_Codes_All
+* ICD10cm_codes_chronic_condition_indicators
+* ICD10cm_Conversions
+
+**వ్యూ స్కీమా:**
+
+* HealthPlanSHPRevenueManagement
+
 Directories:
 
 Holding area test: \\SE1TEEDPDB01\EDPTextFileRepository\HoldingArea\healthplan_shp_revenuemanagement
@@ -54,6 +89,16 @@ The **business team wants 3 specific ICD10 tables to be loaded into EDP**, so th
 
 That’s it. Your job is to **take files → load them into database tables → create views**.
 
+## 🔹 ఈ స్టోరీ ఏమి గురించి?
+
+మీకు ఒక టికెట్ వచ్చింది: **PRB0049658 – RevenueManagement tables ingestion to EDP**
+
+👉 సింపుల్‌గా చెప్పాలంటే:
+**బిజినెస్ టీమ్‌కు 3 ప్రత్యేకమైన ICD10 టేబుల్స్‌ను EDP లో లోడ్ చేయాలి**, వాళ్లు రిపోర్టింగ్ కోసం ఉపయోగించుకోవడానికి.
+
+అంతే. మీ పని ఏమిటంటే 👉
+**ఫైల్స్ తీసుకుని → డేటాబేస్ టేబుల్స్‌లో లోడ్ చేసి → వాటికి వ్యూస్ క్రియేట్ చేయడం.**
+
 ---
 
 # 🔹 What Files Did They Give?
@@ -73,6 +118,24 @@ They gave **3 text files** (pipe `|` delimited):
   * Example: `ICD10cm_Codes_All_2026_02_10.txt`
 
 So every time they send a new file, date will change.
+
+# 🔹 వాళ్లు ఏ ఫైల్స్ ఇచ్చారు?
+
+వాళ్లు **3 టెక్స్ట్ ఫైల్స్** ఇచ్చారు (pipe `|` తో విడగొట్టిన ఫార్మాట్‌లో):
+
+1. `ICD10cm_Codes_All_yyyy_MM_dd.txt`
+2. `ICD10cm_codes_chronic_condition_indicators_yyyy_MM_dd.txt`
+3. `ICD10cm_Conversions_yyyy_MM_dd.txt`
+
+### 📌 ముఖ్యమైన విషయాలు:
+
+* ఫార్మాట్ = **.txt**
+* డిలిమిటర్ = `|`
+* ఫైల్ పేరులో తేదీ ఫార్మాట్ = `yyyy_MM_dd`
+
+  * ఉదాహరణ: `ICD10cm_Codes_All_2026_02_10.txt`
+
+అంటే ప్రతి సారి కొత్త ఫైల్ పంపినప్పుడు, ఫైల్ పేరులో ఉన్న తేదీ మారుతుంది.
 
 ---
 
@@ -97,6 +160,31 @@ ICD10cm_Conversions
 ```
 
 So you need to create or use these tables and load data into them.
+
+---
+
+# 🔹 EDP కి ఏమి కావాలి?
+
+వాళ్లు ఇప్పటికే ఇలా చెప్పారు:
+
+### 🗂 బేస్ టేబుల్స్ (డేటాబేస్‌లో ఉండే అసలు టేబుల్స్)
+
+**స్కీమా:**
+
+```
+healthplan_shp_revenuemanagement
+```
+
+**టేబుల్స్:**
+
+```
+ICD10cm_Codes_All
+ICD10cm_codes_chronic_condition_indicators
+ICD10cm_Conversions
+```
+
+అంటే మీరు చేయాల్సిందేమిటంటే 👉
+ఈ టేబుల్స్‌ను క్రియేట్ చేయాలి లేదా ఉన్న టేబుల్స్‌ను ఉపయోగించి వాటిలో డేటా లోడ్ చేయాలి.
 
 ---
 
@@ -126,7 +214,32 @@ AS
 SELECT * 
 FROM healthplan_shp_revenuemanagement.ICD10cm_Codes_All;
 ```
+### 👀 వ్యూస్ (రిపోర్టింగ్ లేయర్)
 
+**స్కీమా:**
+
+```
+HealthPlanSHPRevenueManagement
+```
+
+**వ్యూస్ పేర్లు (టేబుల్ పేర్లే ఉంటాయి):**
+
+```
+ICD10cm_Codes_All
+ICD10cm_codes_chronic_condition_indicators
+ICD10cm_Conversions
+```
+
+👉 సాధారణంగా వ్యూస్ అనేవి బేస్ టేబుల్స్ నుండి డేటా సెలెక్ట్ చేస్తాయి.
+
+**ఉదాహరణ:**
+
+```sql
+CREATE VIEW HealthPlanSHPRevenueManagement.ICD10cm_Codes_All
+AS
+SELECT * 
+FROM healthplan_shp_revenuemanagement.ICD10cm_Codes_All;
+```
 ---
 
 # 🔹 Where Will Files Come From?
