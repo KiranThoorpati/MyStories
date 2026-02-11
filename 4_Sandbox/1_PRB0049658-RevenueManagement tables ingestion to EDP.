@@ -1,0 +1,839 @@
+### PRB0049658-RevenueManagement tables ingestion to EDP.
+
+Description
+
+Request number: PRB0049658
+
+Purpose: Business wanted this tables in EDP for their reports.
+
+File specs:
+
+ICD10cm_Codes_All_yyyy_MM_dd.txt
+
+ICD10cm_codes_chronic_condition_indicators_yyyy_MM_dd.txt
+
+ICD10cm_Conversions_yyyy_MM_dd.txt
+
+Format: txt (Pipe delimited)
+TimeStamp: yyyy_MM_dd
+
+EDP Specs:
+
+Base_Table Names: 
+ICD10cm_Codes_All
+ICD10cm_codes_chronic_condition_indicators
+ICD10cm_Conversions
+
+Base schema name:  
+healthplan_shp_revenuemanagement
+
+View names: 
+ICD10cm_Codes_All
+ICD10cm_codes_chronic_condition_indicators
+ICD10cm_Conversions
+
+View schema: HealthPlanSHPRevenueManagement
+
+Directories:
+
+Holding area test: \\SE1TEEDPDB01\EDPTextFileRepository\HoldingArea\healthplan_shp_revenuemanagement
+Landing area test: \\SE1TEEDPDB01\EDPTextFileRepository\LandingArea\healthplan_shp_revenuemanagement
+Prod Landing area: \\SEPREDPDB01\EDPTextFileRepository\LandingArea\healthplan_shp_revenuemanagement
+
+they provided with 3 files of having the given type data 
+
+so This is the story i got assigned please explain this in simple English 
+
+---
+## 🔹 What Is This Story About?
+
+You got a ticket: **PRB0049658 – RevenueManagement tables ingestion to EDP**
+
+👉 In simple words:
+The **business team wants 3 specific ICD10 tables to be loaded into EDP**, so they can use them for reporting.
+
+That’s it. Your job is to **take files → load them into database tables → create views**.
+
+---
+
+# 🔹 What Files Did They Give?
+
+They gave **3 text files** (pipe `|` delimited):
+
+1. `ICD10cm_Codes_All_yyyy_MM_dd.txt`
+2. `ICD10cm_codes_chronic_condition_indicators_yyyy_MM_dd.txt`
+3. `ICD10cm_Conversions_yyyy_MM_dd.txt`
+
+### 📌 Important:
+
+* Format = **.txt**
+* Delimiter = `|`
+* Date in filename = `yyyy_MM_dd`
+
+  * Example: `ICD10cm_Codes_All_2026_02_10.txt`
+
+So every time they send a new file, date will change.
+
+---
+
+# 🔹 What Is EDP Expecting?
+
+They already told you:
+
+### 🗂 Base Tables (Physical tables in DB)
+
+Schema:
+
+```
+healthplan_shp_revenuemanagement
+```
+
+Tables:
+
+```
+ICD10cm_Codes_All
+ICD10cm_codes_chronic_condition_indicators
+ICD10cm_Conversions
+```
+
+So you need to create or use these tables and load data into them.
+
+---
+
+### 👀 Views (Reporting layer)
+
+Schema:
+
+```
+HealthPlanSHPRevenueManagement
+```
+
+View names (same as table names):
+
+```
+ICD10cm_Codes_All
+ICD10cm_codes_chronic_condition_indicators
+ICD10cm_Conversions
+```
+
+👉 Usually views just select from base tables.
+
+Example:
+
+```sql
+CREATE VIEW HealthPlanSHPRevenueManagement.ICD10cm_Codes_All
+AS
+SELECT * 
+FROM healthplan_shp_revenuemanagement.ICD10cm_Codes_All;
+```
+
+---
+
+# 🔹 Where Will Files Come From?
+
+They gave you directory paths:
+
+### 🧪 Test Environment
+
+Holding Area:
+
+```
+\\SE1TEEDPDB01\EDPTextFileRepository\HoldingArea\healthplan_shp_revenuemanagement
+```
+
+Landing Area:
+
+```
+\\SE1TEEDPDB01\EDPTextFileRepository\LandingArea\healthplan_shp_revenuemanagement
+```
+
+### 🚀 Production
+
+```
+\\SEPREDPDB01\EDPTextFileRepository\LandingArea\healthplan_shp_revenuemanagement
+```
+
+---
+
+# 🔹 What Usually Happens in These Projects?
+
+Typical EDP Flow:
+
+1️⃣ File comes to **Holding Area**
+2️⃣ Process validates file
+3️⃣ File moves to **Landing Area**
+4️⃣ ETL (SSIS / ADF / Databricks — whatever your org uses)
+5️⃣ Data gets inserted into base tables
+6️⃣ Views expose data to business
+
+---
+
+# 🔹 What Exactly Is Your Responsibility?
+
+In simple words:
+
+You need to:
+
+✅ Understand file structure
+✅ Create tables (if not created already)
+✅ Load pipe-delimited data into tables
+✅ Create views in reporting schema
+✅ Make sure naming matches specs
+✅ Test in Test environment
+✅ Then move to Prod
+
+---
+
+# 🔹 That Screenshot You Shared
+
+That image shows **table design** for:
+
+```
+ICD10cm_codes_chronic_condition_indicators
+```
+
+It shows:
+
+* Column names
+* Data types
+* Primary key
+* Null allowed or not
+
+So that’s your blueprint for table creation.
+
+---
+
+# 🔹 What You Should Do Step-by-Step
+
+Here’s your action plan:
+
+### Step 1️⃣
+
+Check file structure
+Open the txt file and confirm:
+
+* Columns match table design
+* Data types correct
+
+### Step 2️⃣
+
+Create tables in:
+
+```
+healthplan_shp_revenuemanagement
+```
+
+### Step 3️⃣
+
+Create ETL job to load pipe-delimited file
+
+If SSIS:
+
+* Flat File Source
+* Pipe delimiter
+* Map to destination table
+
+If Databricks:
+
+* Read CSV with delimiter="|"
+* Write to SQL table
+
+### Step 4️⃣
+
+Create views in:
+
+```
+HealthPlanSHPRevenueManagement
+```
+
+### Step 5️⃣
+
+Test with sample file
+
+### Step 6️⃣
+
+Move to Prod
+
+---
+
+# 🔹 What Is The Purpose Business-Wise?
+
+ICD10 = medical diagnosis codes
+These tables contain:
+
+* All ICD10 codes
+* Chronic indicators
+* Conversion mappings
+
+Business uses them to:
+
+* Identify chronic conditions
+* Revenue reporting
+* Risk adjustment
+* Analytics
+
+---
+
+# 🔹 In One Sentence
+
+👉 This story is about **loading 3 ICD10 text files into EDP database tables and exposing them through views for reporting.**
+
+---
+
+Nice 🔥 this is good — now you’re thinking like a real ETL developer.
+
+You showed me a **working ingestion metadata script** for `admincosts`.
+Now you want to create a similar one for your ICD10 files. Perfect approach.
+
+Let’s break this into two parts:
+
+1️⃣ What you must understand before starting
+2️⃣ How your ICD10 metadata script should look
+
+---
+
+# ✅ PART 1 — What You MUST Know Before Starting
+
+Before you copy-paste and modify anything, you need clarity on these:
+
+---
+
+## 🔹 1. File Details
+
+For ICD10 story, confirm:
+
+* File format → txt (pipe `|` delimited)
+* Has header? (most likely yes)
+* File timestamp format → `yyyy_MM_dd`
+* How many files expected → 1 per type?
+* Load strategy → truncate or append?
+
+⚠ Very important:
+Are these files full refresh files?
+Usually ICD reference files = **truncate & reload**
+
+---
+
+## 🔹 2. Table Structure
+
+You must have:
+
+* Column names
+* Data types
+* Primary key
+* Null allowed or not
+
+You showed one screenshot for:
+
+```
+ICD10cm_codes_chronic_condition_indicators
+```
+
+You must also get structure for:
+
+* ICD10cm_Codes_All
+* ICD10cm_Conversions
+
+Without column structure you cannot write metadata.
+
+---
+
+## 🔹 3. Source System Details
+
+You need:
+
+* Source name (example: 'admincosts')
+* Drop folder name
+* System owner name & email
+
+For your case maybe:
+
+```
+@Source_Name = 'revenuemanagement'
+```
+
+(or whatever naming standard your team uses)
+
+---
+
+## 🔹 4. Load Strategy Decision
+
+Most reference files like ICD:
+
+👉 Initial load → truncate
+👉 Incremental → usually not needed
+
+So you may only need ONE event trigger:
+
+```
+revenuemanagement_initial
+```
+
+Unless business says otherwise.
+
+---
+
+---
+
+# ✅ PART 2 — How Your ICD10 Metadata Script Should Look
+
+Now let’s build sample for one file:
+
+```
+ICD10cm_codes_chronic_condition_indicators
+```
+
+I’ll write a clean template you can modify.
+
+---
+
+# 🔹 Step 1 — Source System
+
+```sql
+EXEC [ETL].[uspAddSourceSystem] 
+    @Source_Name='revenuemanagement',
+    @System_Owner_Name='Business Owner Name',
+    @System_Owner_Email='email@company.com',
+    @File_Feed_Json = null,
+    @Drop_Folder = 'healthplan_shp_revenuemanagement',
+    @Database_Vendor=null,
+    @Database_Vendor_Version = null,
+    @Igc_Rid=null,
+    @Updated_By = @SysUser,
+    @Update_Datetime = @UpdateDateTime,
+    @Integration_Runtime = '';
+```
+
+---
+
+# 🔹 Step 2 — Event Trigger
+
+```sql
+IF NOT EXISTS (SELECT 1 FROM etl.event_trigger 
+               WHERE event_trigger_name='revenuemanagement_initial')
+BEGIN
+    EXEC [ETL].[uspAddEventTrigger] 
+        @Event_Trigger_Name = 'revenuemanagement_initial',
+        @Updated_By = @SysUser,
+        @Update_Datetime = @UpdateDateTime,
+        @Merge_Multiple_Load_Dates_Flag = 0;
+END
+```
+
+---
+
+# 🔹 Step 3 — File Feed Metadata (IMPORTANT CHANGE)
+
+This is different from admincosts.
+
+Your file is:
+
+* txt
+* pipe delimited
+
+So:
+
+```sql
+EXEC [ETL].[uspAddFileToFileFeed]  
+    @source_name = 'revenuemanagement',
+    @file_name = 'ICD10cm_codes_chronic_condition_indicators',
+    @content_type = 'text/plain',
+    @File_Pattern = 'ICD10cm_codes_chronic_condition_indicators_*.txt',
+    @file_delimiter = '|',
+    @event_trigger_name = 'revenuemanagement_initial',
+    @Ingest_Load_strategy = 'truncate',
+    @Sdw_Load_strategy = 'truncate',
+    @has_header = 1,
+    @file_timestamp_format = 'yyyy_MM_dd',
+    @files_to_expect = 1,
+    @critical_flag = 0,
+    @active_flag = 1,
+    @header_rows_to_skip = 0,
+    @file_has_footer = 0,
+    @text_qualifier = NULL,
+    @row_delimiter = NULL,
+    @padding_character = NULL,
+    @Ingestion_Destination_Description = 'Databricks Only';
+```
+
+---
+
+# 🔹 Step 4 — Column Metadata
+
+From your screenshot example:
+
+```sql
+EXEC [ETL].[uspAddColumnMetadata] 
+@source_name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@Column_Name = 'icd_10_cm_code',
+@Data_Type = 'varchar',
+@Data_Length = 15,
+@Primary_Key = 1,
+...
+```
+
+Then repeat for:
+
+* icd_10_cm_code_description (varchar 255)
+* chronic_indicator (smallint)
+* chronic_indicator_desc (varchar 50)
+
+Do same for other two files also.
+
+---
+
+# 🔹 Step 5 — Databricks View Metadata
+
+```sql
+EXECUTE [dataops].[uspAddDatabricksViewMetadata] 
+@Source_Name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@View_Schema = 'HealthPlanSHPRevenueManagement',
+@View_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@View_Script = 'select * from healthplan_shp_revenuemanagement.ICD10cm_codes_chronic_condition_indicators',
+@Updated_By = @SysUser,
+@Update_Datetime = @UpdateDateTime,
+@View_Security_Script = NULL;
+```
+
+---
+
+# 🚨 What You Must Double Check Before Running
+
+Here is your checklist:
+
+☐ Confirm exact file name pattern
+☐ Confirm delimiter = |
+☐ Confirm header exists
+☐ Confirm load strategy (truncate vs append)
+☐ Confirm timestamp format
+☐ Confirm column order matches file
+☐ Confirm schema naming standards
+☐ Confirm source name approved by team
+
+---
+
+# 💡 Most Common Mistakes Developers Make
+
+1. Wrong file pattern
+2. Wrong delimiter
+3. Data type mismatch
+4. Forgot to mark primary key
+5. Case sensitivity issues
+6. Wrong schema in view script
+
+Don’t be that developer 😄
+
+---
+
+# 🎯 Final Understanding
+
+Your task is NOT just writing script.
+
+Your task is:
+
+👉 Register source
+👉 Register file feed
+👉 Register columns
+👉 Register view metadata
+👉 Make ingestion framework auto pick file
+
+---
+
+If you want, next I can:
+
+* Write full combined script for all 3 ICD files
+* Explain how ingestion framework actually works internally
+* Or explain in Telugu
+* Or help you design truncate vs append strategy
+
+Tell me what you want next 👌
+
+---
+
+Love it. Let’s build the **full combined ingestion metadata script** for all 3 ICD files properly and cleanly.
+
+I’ll assume:
+
+* Source name → `revenuemanagement`
+* Files are `.txt`
+* Pipe delimited `|`
+* Full refresh files → `truncate`
+* Timestamp format → `yyyy_MM_dd`
+* Destination → Databricks
+* View schema → `HealthPlanSHPRevenueManagement`
+* Base schema → `healthplan_shp_revenuemanagement`
+
+You can adjust owner/email if needed.
+
+---
+
+# ✅ FULL COMBINED METADATA SCRIPT (ALL 3 FILES)
+
+```sql
+DECLARE @UpdateDateTime datetime = etl.udfGetTimeZoneEST(GETDATE());
+DECLARE @SysUser nvarchar(255) = SUSER_SNAME();
+
+BEGIN TRANSACTION;  
+BEGIN TRY
+
+---------------------------------------------------------
+-- 1️⃣ SOURCE SYSTEM
+---------------------------------------------------------
+EXEC [ETL].[uspAddSourceSystem] 
+    @Source_Name='revenuemanagement',
+    @System_Owner_Name='Business Owner',
+    @System_Owner_Email='owner@email.com',
+    @File_Feed_Json = null,
+    @Drop_Folder = 'healthplan_shp_revenuemanagement',
+    @Database_Vendor=null,
+    @Database_Vendor_Version = null,
+    @Igc_Rid=null,
+    @Updated_By = @SysUser,
+    @Update_Datetime = @UpdateDateTime,
+    @Integration_Runtime = '';
+
+---------------------------------------------------------
+-- 2️⃣ EVENT TRIGGER
+---------------------------------------------------------
+IF NOT EXISTS (SELECT 1 FROM etl.event_trigger 
+               WHERE event_trigger_name='revenuemanagement_initial')
+BEGIN
+    EXEC [ETL].[uspAddEventTrigger] 
+        @Event_Trigger_Name = 'revenuemanagement_initial',
+        @Updated_By = @SysUser,
+        @Update_Datetime = @UpdateDateTime,
+        @Merge_Multiple_Load_Dates_Flag = 0;
+END
+
+
+---------------------------------------------------------
+-- 3️⃣ FILE FEED METADATA (ALL 3 FILES)
+---------------------------------------------------------
+
+-- ICD10cm_Codes_All
+EXEC [ETL].[uspAddFileToFileFeed]  
+    @source_name = 'revenuemanagement',
+    @file_name = 'ICD10cm_Codes_All',
+    @content_type = 'text/plain',
+    @File_Pattern = 'ICD10cm_Codes_All_*.txt',
+    @file_delimiter = '|',
+    @event_trigger_name = 'revenuemanagement_initial',
+    @Ingest_Load_strategy = 'truncate',
+    @Sdw_Load_strategy = 'truncate',
+    @has_header = 1,
+    @file_timestamp_format = 'yyyy_MM_dd',
+    @files_to_expect = 1,
+    @critical_flag = 0,
+    @active_flag = 1,
+    @header_rows_to_skip = 0,
+    @file_has_footer = 0,
+    @text_qualifier = NULL,
+    @row_delimiter = NULL,
+    @padding_character = NULL,
+    @Ingestion_Destination_Description = 'Databricks Only';
+
+
+-- ICD10cm_codes_chronic_condition_indicators
+EXEC [ETL].[uspAddFileToFileFeed]  
+    @source_name = 'revenuemanagement',
+    @file_name = 'ICD10cm_codes_chronic_condition_indicators',
+    @content_type = 'text/plain',
+    @File_Pattern = 'ICD10cm_codes_chronic_condition_indicators_*.txt',
+    @file_delimiter = '|',
+    @event_trigger_name = 'revenuemanagement_initial',
+    @Ingest_Load_strategy = 'truncate',
+    @Sdw_Load_strategy = 'truncate',
+    @has_header = 1,
+    @file_timestamp_format = 'yyyy_MM_dd',
+    @files_to_expect = 1,
+    @critical_flag = 0,
+    @active_flag = 1,
+    @header_rows_to_skip = 0,
+    @file_has_footer = 0,
+    @text_qualifier = NULL,
+    @row_delimiter = NULL,
+    @padding_character = NULL,
+    @Ingestion_Destination_Description = 'Databricks Only';
+
+
+-- ICD10cm_Conversions
+EXEC [ETL].[uspAddFileToFileFeed]  
+    @source_name = 'revenuemanagement',
+    @file_name = 'ICD10cm_Conversions',
+    @content_type = 'text/plain',
+    @File_Pattern = 'ICD10cm_Conversions_*.txt',
+    @file_delimiter = '|',
+    @event_trigger_name = 'revenuemanagement_initial',
+    @Ingest_Load_strategy = 'truncate',
+    @Sdw_Load_strategy = 'truncate',
+    @has_header = 1,
+    @file_timestamp_format = 'yyyy_MM_dd',
+    @files_to_expect = 1,
+    @critical_flag = 0,
+    @active_flag = 1,
+    @header_rows_to_skip = 0,
+    @file_has_footer = 0,
+    @text_qualifier = NULL,
+    @row_delimiter = NULL,
+    @padding_character = NULL,
+    @Ingestion_Destination_Description = 'Databricks Only';
+
+
+---------------------------------------------------------
+-- 4️⃣ COLUMN METADATA (EXAMPLE FOR CHRONIC TABLE)
+---------------------------------------------------------
+
+-- icd_10_cm_code
+EXEC [ETL].[uspAddColumnMetadata] 
+@source_name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@Column_Name = 'icd_10_cm_code',
+@Schema_Version = 1,
+@Mask_Strategy = '',
+@Data_Type = 'varchar',
+@Primary_Key = 1,
+@Sequence_Id = 1,
+@Data_Length = 15,
+@Data_Precision = 0,
+@Data_Scale = 0,
+@Updated_By = @SysUser,
+@Update_Datetime = @UpdateDateTime,
+@Sdw_Distribution = 'ROUND_ROBIN',
+@Sdw_Distribution_Sequence_Id = 0,
+@Date_Format_String = NULL;
+
+
+-- icd_10_cm_code_description
+EXEC [ETL].[uspAddColumnMetadata] 
+@source_name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@Column_Name = 'icd_10_cm_code_description',
+@Schema_Version = 1,
+@Mask_Strategy = '',
+@Data_Type = 'varchar',
+@Primary_Key = 0,
+@Sequence_Id = 2,
+@Data_Length = 255,
+@Data_Precision = 0,
+@Data_Scale = 0,
+@Updated_By = @SysUser,
+@Update_Datetime = @UpdateDateTime,
+@Sdw_Distribution = 'ROUND_ROBIN',
+@Sdw_Distribution_Sequence_Id = 0,
+@Date_Format_String = NULL;
+
+
+-- chronic_indicator
+EXEC [ETL].[uspAddColumnMetadata] 
+@source_name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@Column_Name = 'chronic_indicator',
+@Schema_Version = 1,
+@Mask_Strategy = '',
+@Data_Type = 'smallint',
+@Primary_Key = 0,
+@Sequence_Id = 3,
+@Data_Length = 0,
+@Data_Precision = 0,
+@Data_Scale = 0,
+@Updated_By = @SysUser,
+@Update_Datetime = @UpdateDateTime,
+@Sdw_Distribution = 'ROUND_ROBIN',
+@Sdw_Distribution_Sequence_Id = 0,
+@Date_Format_String = NULL;
+
+
+-- chronic_indicator_desc
+EXEC [ETL].[uspAddColumnMetadata] 
+@source_name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@Column_Name = 'chronic_indicator_desc',
+@Schema_Version = 1,
+@Mask_Strategy = '',
+@Data_Type = 'varchar',
+@Primary_Key = 0,
+@Sequence_Id = 4,
+@Data_Length = 50,
+@Data_Precision = 0,
+@Data_Scale = 0,
+@Updated_By = @SysUser,
+@Update_Datetime = @UpdateDateTime,
+@Sdw_Distribution = 'ROUND_ROBIN',
+@Sdw_Distribution_Sequence_Id = 0,
+@Date_Format_String = NULL;
+
+
+---------------------------------------------------------
+-- 5️⃣ DATABRICKS VIEW METADATA (ALL 3)
+---------------------------------------------------------
+
+EXECUTE [dataops].[uspAddDatabricksViewMetadata] 
+@Source_Name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_Codes_All',
+@View_Schema = 'HealthPlanSHPRevenueManagement',
+@View_Name = 'ICD10cm_Codes_All',
+@View_Script = 'select * from healthplan_shp_revenuemanagement.ICD10cm_Codes_All',
+@Updated_By = @SysUser,
+@Update_Datetime = @UpdateDateTime,
+@View_Security_Script = NULL;
+
+
+EXECUTE [dataops].[uspAddDatabricksViewMetadata] 
+@Source_Name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@View_Schema = 'HealthPlanSHPRevenueManagement',
+@View_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@View_Script = 'select * from healthplan_shp_revenuemanagement.ICD10cm_codes_chronic_condition_indicators',
+@Updated_By = @SysUser,
+@Update_Datetime = @UpdateDateTime,
+@View_Security_Script = NULL;
+
+
+EXECUTE [dataops].[uspAddDatabricksViewMetadata] 
+@Source_Name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_Conversions',
+@View_Schema = 'HealthPlanSHPRevenueManagement',
+@View_Name = 'ICD10cm_Conversions',
+@View_Script = 'select * from healthplan_shp_revenuemanagement.ICD10cm_Conversions',
+@Updated_By = @SysUser,
+@Update_Datetime = @UpdateDateTime,
+@View_Security_Script = NULL;
+
+
+END TRY  
+BEGIN CATCH  
+    IF @@TRANCOUNT > 0  
+        ROLLBACK TRANSACTION;  
+    THROW;
+END CATCH;  
+
+IF @@TRANCOUNT > 0  
+    COMMIT TRANSACTION;
+```
+
+---
+
+# 🚨 VERY IMPORTANT
+
+You still need to:
+
+* Add column metadata for:
+
+  * ICD10cm_Codes_All
+  * ICD10cm_Conversions
+
+I only fully expanded chronic table to avoid 3 pages of repetitive script 😄
+But structure will be same.
+
+---
+
+If you want, next I can:
+
+* Generate column metadata for other 2 tables also
+* Or review your actual file structure and customize perfectly
+* Or explain how ingestion framework will now auto-pick the file
+
+What’s the next move, Kiran? 🚀
+
