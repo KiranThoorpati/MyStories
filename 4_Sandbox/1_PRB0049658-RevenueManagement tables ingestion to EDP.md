@@ -941,6 +941,29 @@ I’ll assume:
 
 You can adjust owner/email if needed.
 
+చాలా బాగుంది 👍 ఇప్పుడు అన్ని 3 ICD ఫైల్స్‌కి పూర్తి combined ingestion metadata script తయారు చేద్దాం — క్లియర్‌గా, క్లీన్‌గా.
+
+నేను ఇవి assume చేస్తున్నాను:
+
+* Source name → **revenuemanagement**
+* Files → **.txt**
+* Delimiter → **| (pipe)**
+* Load strategy → **Full refresh (truncate)**
+* Timestamp format → **yyyy_MM_dd**
+* Destination → **Databricks**
+* View schema → **HealthPlanSHPRevenueManagement**
+* Base schema → **healthplan_shp_revenuemanagement**
+* Owner / Email → అవసరమైతే మార్చుకోవచ్చు
+
+అంటే మనం చేయబోయేది:
+
+👉 Source register చేయాలి
+👉 3 file feeds register చేయాలి
+👉 3 tables కి metadata register చేయాలి
+👉 Columns register చేయాలి
+👉 Views register చేయాలి
+👉 Truncate strategy define చేయాలి
+
 ---
 
 # ✅ FULL COMBINED METADATA SCRIPT (ALL 3 FILES)
