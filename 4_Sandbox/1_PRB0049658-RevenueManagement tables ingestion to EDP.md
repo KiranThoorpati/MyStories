@@ -279,6 +279,17 @@ Typical EDP Flow:
 5️⃣ Data gets inserted into base tables
 6️⃣ Views expose data to business
 
+🔹 ఈ ప్రాజెక్ట్‌లలో సాధారణంగా ఏమి జరుగుతుంది?
+
+**Typical EDP Flow ఇలా ఉంటుంది:**
+
+1️⃣ ఫైల్ మొదట Holding Area కి వస్తుంది
+2️⃣ ప్రాసెస్ ఆ ఫైల్‌ని వాలిడేట్ చేస్తుంది (సరైనదా కాదా చెక్ చేస్తుంది)
+3️⃣ తర్వాత ఫైల్ Landing Area కి వెళ్తుంది
+4️⃣ ETL ప్రాసెస్ (SSIS / ADF / Databricks — మీ ఆర్గనైజేషన్ ఏది ఉపయోగిస్తే అది) రన్ అవుతుంది
+5️⃣ డేటా బేస్ టేబుల్స్‌లో ఇన్సర్ట్ అవుతుంది
+6️⃣ చివరగా వ్యూస్ ద్వారా ఆ డేటా బిజినెస్ టీమ్‌కు కనిపిస్తుంది
+
 ---
 
 # 🔹 What Exactly Is Your Responsibility?
