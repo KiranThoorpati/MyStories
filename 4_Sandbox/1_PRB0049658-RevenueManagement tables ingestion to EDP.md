@@ -306,6 +306,18 @@ You need to:
 ✅ Test in Test environment
 ✅ Then move to Prod
 
+🔹 మీ బాధ్యత ఏమిటి?
+
+సింపుల్‌గా చెప్పాలంటే, మీరు చేయాల్సిందేమిటంటే:
+
+✅ ఫైల్ స్ట్రక్చర్‌ను అర్థం చేసుకోవాలి
+✅ టేబుల్స్ ఇప్పటికే లేకపోతే క్రియేట్ చేయాలి
+✅ Pipe (`|`) తో విడగొట్టిన డేటాను టేబుల్స్‌లో లోడ్ చేయాలి
+✅ రిపోర్టింగ్ స్కీమాలో వ్యూస్ క్రియేట్ చేయాలి
+✅ పేర్లు స్పెసిఫికేషన్‌కు సరిపోతున్నాయా చూసుకోవాలి
+✅ ముందుగా Test ఎన్విరాన్‌మెంట్‌లో టెస్ట్ చేయాలి
+✅ చివరగా Prod కి మువ్ చేయాలి
+
 ---
 
 # 🔹 That Screenshot You Shared
@@ -324,6 +336,21 @@ It shows:
 * Null allowed or not
 
 So that’s your blueprint for table creation.
+
+మీరు షేర్ చేసిన స్క్రీన్‌షాట్ గురించి:
+
+ఆ ఇమేజ్‌లో ఈ టేబుల్ డిజైన్ చూపిస్తోంది:
+
+**ICD10cm_codes_chronic_condition_indicators**
+
+అందులో ఏమేమి ఉన్నాయి అంటే:
+
+* కాలమ్ పేర్లు
+* డేటా టైప్స్
+* ప్రైమరీ కీ
+* Null అనుమతించాలా లేదా
+
+అంటే టేబుల్ క్రియేట్ చేయడానికి అదే మీ బ్లూప్రింట్ (మార్గదర్శకం).
 
 ---
 
@@ -378,6 +405,47 @@ Test with sample file
 
 Move to Prod
 
+🔹 మీరు స్టెప్ బై స్టెప్ ఏమి చేయాలి?
+
+ఇది మీ యాక్షన్ ప్లాన్:
+
+**Step 1️⃣**
+ఫైల్ స్ట్రక్చర్ చెక్ చేయాలి.
+txt ఫైల్ ఓపెన్ చేసి ఇవి కన్ఫర్మ్ చేయండి:
+
+* కాలమ్స్ టేబుల్ డిజైన్‌కి మ్యాచ్ అవుతున్నాయా?
+* డేటా టైప్స్ సరైనవా?
+
+**Step 2️⃣**
+ఈ స్కీమాలో టేబుల్స్ క్రియేట్ చేయాలి:
+
+`healthplan_shp_revenuemanagement`
+
+**Step 3️⃣**
+Pipe (`|`) డిలిమిటెడ్ ఫైల్‌ను లోడ్ చేసే ETL జాబ్ క్రియేట్ చేయాలి.
+
+👉 SSIS అయితే:
+
+* Flat File Source తీసుకోండి
+* Delimiter‌గా Pipe (`|`) ఇవ్వండి
+* Destination టేబుల్‌కి మ్యాప్ చేయండి
+
+👉 Databricks అయితే:
+
+* CSV ని `delimiter="|"` తో రీడ్ చేయండి
+* SQL టేబుల్‌లో రైట్ చేయండి
+
+**Step 4️⃣**
+ఈ స్కీమాలో వ్యూస్ క్రియేట్ చేయాలి:
+
+`HealthPlanSHPRevenueManagement`
+
+**Step 5️⃣**
+Sample ఫైల్‌తో టెస్ట్ చేయాలి.
+
+**Step 6️⃣**
+అన్ని సరిగ్గా ఉన్నాక Prod కి మువ్ చేయాలి.
+
 ---
 
 # 🔹 What Is The Purpose Business-Wise?
@@ -396,11 +464,31 @@ Business uses them to:
 * Risk adjustment
 * Analytics
 
+🔹 బిజినెస్ పరంగా దీని ప్రయోజనం ఏమిటి?
+
+**ICD10** అంటే మెడికల్ డయాగ్నోసిస్ కోడ్స్.
+ఈ టేబుల్స్‌లో ఏముంటాయి అంటే:
+
+* అన్ని ICD10 కోడ్స్
+* క్రానిక్ (దీర్ఘకాలిక) కండిషన్ సూచనలు
+* కన్వర్షన్ మ్యాపింగ్స్
+
+బిజినెస్ టీమ్ వీటిని ఉపయోగించేది:
+
+* క్రానిక్ కండిషన్స్‌ను గుర్తించడానికి
+* రెవెన్యూ రిపోర్టింగ్ కోసం
+* రిస్క్ అడ్జస్ట్మెంట్ కోసం
+* అనలిటిక్స్ కోసం
+
 ---
 
 # 🔹 In One Sentence
 
 👉 This story is about **loading 3 ICD10 text files into EDP database tables and exposing them through views for reporting.**
+
+🔹 ఒకే వాక్యంలో చెప్పాలంటే:
+
+👉 ఈ స్టోరీ అంటే 3 ICD10 టెక్స్ట్ ఫైల్స్‌ను EDP డేటాబేస్ టేబుల్స్‌లో లోడ్ చేసి, వాటిని రిపోర్టింగ్ కోసం వ్యూస్ ద్వారా అందుబాటులో ఉంచడం.
 
 ---
 
@@ -413,6 +501,15 @@ Let’s break this into two parts:
 
 1️⃣ What you must understand before starting
 2️⃣ How your ICD10 metadata script should look
+
+బాగుంది 🔥 ఇప్పుడు నిజంగా ETL డెవలపర్‌లా ఆలోచిస్తున్నారు 👍
+
+మీరు admincosts కోసం వర్కింగ్ ingestion metadata script చూపించారు. ఇప్పుడు అదే విధంగా మీ ICD10 ఫైల్స్ కోసం క్రియేట్ చేయాలనుకుంటున్నారు. చాలా మంచి విధానం.
+
+ఇది రెండు భాగాలుగా బ్రేక్ చేద్దాం:
+
+1️⃣ మొదలు పెట్టే ముందు మీరు తప్పనిసరిగా అర్థం చేసుకోవాల్సిన విషయాలు
+2️⃣ మీ ICD10 metadata script ఎలా ఉండాలి
 
 ---
 
@@ -495,6 +592,83 @@ revenuemanagement_initial
 
 Unless business says otherwise.
 
+✅ **PART 1 — మొదలు పెట్టే ముందు మీరు తప్పనిసరిగా తెలుసుకోవాల్సిన విషయాలు**
+
+ఏదైనా copy-paste చేసి మార్చే ముందు, ఈ విషయాల్లో క్లారిటీ ఉండాలి:
+
+---
+
+🔹 **1. ఫైల్ వివరాలు (File Details)**
+
+ICD10 స్టోరీ కోసం ఇవి కన్ఫర్మ్ చేయాలి:
+
+* ఫైల్ ఫార్మాట్ → txt (pipe `|` delimited)
+* Header ఉందా? (సాధారణంగా ఉంటుంది)
+* ఫైల్ టైమ్‌స్టాంప్ ఫార్మాట్ → `yyyy_MM_dd`
+* ప్రతి టైప్‌కు ఎన్ని ఫైల్స్ వస్తాయి? → ఒక్కటి చొప్పునా?
+* Load strategy → truncate చేయాలా? append చేయాలా?
+
+⚠ చాలా ముఖ్యమైన విషయం:
+ఈ ఫైల్స్ full refresh ఫైల్సా?
+సాధారణంగా ICD reference ఫైల్స్ అయితే → **truncate చేసి మళ్లీ reload చేస్తారు.**
+
+---
+
+🔹 **2. టేబుల్ స్ట్రక్చర్ (Table Structure)**
+
+మీ దగ్గర తప్పనిసరిగా ఉండాల్సినవి:
+
+* కాలమ్ పేర్లు
+* డేటా టైప్స్
+* Primary key
+* Null అనుమతించాలా లేదా
+
+మీరు ఒక స్క్రీన్‌షాట్ చూపించారు:
+
+* `ICD10cm_codes_chronic_condition_indicators`
+
+కానీ ఇంకా ఈ రెండు టేబుల్స్ స్ట్రక్చర్ కూడా కావాలి:
+
+* `ICD10cm_Codes_All`
+* `ICD10cm_Conversions`
+
+కాలమ్ స్ట్రక్చర్ లేకుండా metadata script రాయలేరు.
+
+---
+
+🔹 **3. సోర్స్ సిస్టమ్ వివరాలు (Source System Details)**
+
+మీకు ఇవి అవసరం:
+
+* Source name (ఉదా: `'admincosts'`)
+* Drop folder పేరు
+* System owner పేరు & email
+
+మీ కేసులో ఇలా ఉండొచ్చు:
+
+```
+@Source_Name = 'revenuemanagement'
+```
+
+(మీ టీమ్ naming standard ప్రకారం మార్చుకోవాలి)
+
+---
+
+🔹 **4. Load Strategy నిర్ణయం**
+
+ICD లాంటి reference ఫైల్స్ సాధారణంగా:
+
+👉 Initial load → truncate
+👉 Incremental → ఎక్కువగా అవసరం ఉండదు
+
+అందుకే మీకు ఒకే event trigger సరిపోవచ్చు:
+
+```
+revenuemanagement_initial
+```
+
+Business వేరేలా చెప్పకపోతే ఇది సరిపోతుంది.
+
 ---
 
 ---
@@ -508,6 +682,14 @@ ICD10cm_codes_chronic_condition_indicators
 ```
 
 I’ll write a clean template you can modify.
+
+✅ **PART 2 — మీ ICD10 Metadata Script ఎలా ఉండాలి**
+
+ఇప్పుడు ఒక ఫైల్ కోసం సాంపిల్‌గా తయారు చేద్దాం:
+
+**ICD10cm_codes_chronic_condition_indicators**
+
+మీరు మార్చుకుని ఉపయోగించుకునేలా నేను ఒక క్లియర్ టెంప్లేట్ రాస్తాను.
 
 ---
 
@@ -605,6 +787,29 @@ Then repeat for:
 
 Do same for other two files also.
 
+🔹 **Step 4 — కాలమ్ మెటాడేటా**
+
+మీరు చూపించిన స్క్రీన్‌షాట్ ఉదాహరణ ప్రకారం ఇలా ఉంటుంది:
+
+```sql
+EXEC [ETL].[uspAddColumnMetadata] 
+@source_name = 'revenuemanagement',
+@Object_Name = 'ICD10cm_codes_chronic_condition_indicators',
+@Column_Name = 'icd_10_cm_code',
+@Data_Type = 'varchar',
+@Data_Length = 15,
+@Primary_Key = 1,
+...
+```
+
+తర్వాత ఇదే విధంగా మిగతా కాలమ్స్ కోసం కూడా రిపీట్ చేయాలి:
+
+* `icd_10_cm_code_description` (varchar 255)
+* `chronic_indicator` (smallint)
+* `chronic_indicator_desc` (varchar 50)
+
+అలాగే మిగతా రెండు ఫైల్స్‌కూ కూడా ఇదే విధంగా కాలమ్ మెటాడేటా యాడ్ చేయాలి.
+
 ---
 
 # 🔹 Step 5 — Databricks View Metadata
@@ -636,6 +841,19 @@ Here is your checklist:
 ☐ Confirm schema naming standards
 ☐ Confirm source name approved by team
 
+🚨 **రన్ చేయడానికి ముందు మీరు తప్పనిసరిగా డబుల్ చెక్ చేయాల్సినవి**
+
+ఇది మీ చెక్‌లిస్ట్:
+
+☐ ఖచ్చితమైన ఫైల్ పేరు ప్యాటర్న్ కన్ఫర్మ్ చేయండి
+☐ Delimiter `|` కరెక్ట్‌గా ఉందో చూసుకోండి
+☐ Header ఉందో లేదో కన్ఫర్మ్ చేయండి
+☐ Load strategy (truncate లేదా append) ఫైనల్ చేసుకోండి
+☐ Timestamp ఫార్మాట్ సరైందో చూసుకోండి
+☐ ఫైల్‌లో ఉన్న కాలమ్ ఆర్డర్ టేబుల్‌తో మ్యాచ్ అవుతుందో చూసుకోండి
+☐ Schema naming standards ఫాలో అయ్యాయో కన్ఫర్మ్ చేయండి
+☐ Source name టీమ్ ఆప్రూవ్ చేసిందో లేదో చూసుకోండి
+
 ---
 
 # 💡 Most Common Mistakes Developers Make
@@ -648,6 +866,17 @@ Here is your checklist:
 6. Wrong schema in view script
 
 Don’t be that developer 😄
+
+💡 **డెవలపర్లు ఎక్కువగా చేసే కామన్ మిస్టేక్స్**
+
+* తప్పు ఫైల్ పేరు ప్యాటర్న్ పెట్టడం
+* తప్పు delimiter ఉపయోగించడం
+* Data type mismatch ఉండడం
+* Primary key mark చేయడం మర్చిపోవడం
+* Case sensitivity సమస్యలు రావడం
+* View script‌లో తప్పు schema ఉపయోగించడం
+
+అలాంటి డెవలపర్ అవ్వకండి 😄
 
 ---
 
@@ -663,6 +892,18 @@ Your task is:
 👉 Register view metadata
 👉 Make ingestion framework auto pick file
 
+🎯 **చివరి అవగాహన**
+
+మీ పని కేవలం స్క్రిప్ట్ రాయడం మాత్రమే కాదు.
+
+మీ అసలు బాధ్యత ఏమిటంటే:
+
+👉 Source‌ను register చేయాలి
+👉 File feed‌ను register చేయాలి
+👉 Columns‌ను register చేయాలి
+👉 View metadata‌ను register చేయాలి
+👉 Ingestion framework ఆటోమేటిక్‌గా ఫైల్‌ను పిక్ చేసుకునేలా సెట్ చేయాలి
+
 ---
 
 If you want, next I can:
@@ -673,6 +914,15 @@ If you want, next I can:
 * Or help you design truncate vs append strategy
 
 Tell me what you want next 👌
+
+మీకు ఇష్టం ఉంటే, తర్వాత నేను ఇలా చేయగలను:
+
+👉 అన్ని 3 ICD ఫైల్స్‌కు పూర్తి combined స్క్రిప్ట్ రాసి ఇవ్వగలను
+👉 Ingestion framework లోపల ఎలా పని చేస్తుందో వివరంగా చెప్పగలను
+👉 పూర్తిగా తెలుగులో వివరించగలను
+👉 Truncate vs Append strategy ఎలా డిజైన్ చేయాలో సహాయం చేయగలను
+
+మీకు తర్వాత ఏది కావాలో చెప్పండి 👌
 
 ---
 
