@@ -12,6 +12,16 @@ Annual survey question files will be ingested to enable accurate joins between s
 
 This process will be used to build a **cross-reference table** that enables joins between survey responses and survey questions across different years.
 
+ఈ requirement అంటే ఏమిటంటే:
+
+Survey questions ను patient responses తో join చేయడానికి, ప్రతి సంవత్సరం survey questions ను ఒకే format లో standard గా load చేయాలి. అందులో **Year**, **QID**, మరియు **Question Text** తప్పనిసరిగా ఉండాలి.
+
+ప్రతి సంవత్సరం వచ్చే survey question files ను system లో load చేస్తాం. తర్వాత survey questions మరియు patient responses ని join చేయడానికి **Year + QID** ని కలిపి ఒక key తయారు చేస్తాం.
+
+అలా చేయడం వల్ల ప్రతి patient response సరైన question కి match అవుతుంది.
+
+ఈ process ద్వారా ఒక cross-reference table తయారు చేస్తాం. ఇది వేర్వేరు సంవత్సరాల survey questions మరియు responses ని సరిగ్గా join చేయడానికి ఉపయోగపడుతుంది.
+
 ---
 
 ## Survey Questions
