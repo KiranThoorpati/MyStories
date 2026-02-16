@@ -23,6 +23,23 @@ The solution leverages:
 
 No SSIS components are required.
 
+**1. Overview (సారాంశం)**
+
+ఈ document లో Survey Questions మరియు Survey Responses ను data platform లోకి ఎలా ingest చేస్తామో — architecture మరియు workflow వివరించబడింది.
+
+ఈ process metadata-driven pipeline ఆధారంగా పనిచేస్తుంది.
+ఈ design multi-year surveys ను support చేస్తుంది మరియు **Survey_Key (Year + QID)** ఉపయోగించి questions మరియు responses మధ్య accurate joins చేయడానికి సహాయపడుతుంది.
+
+### ఈ solution లో ఉపయోగించే ముఖ్యమైన components:
+
+* SQL ఆధారిత metadata control tables
+* Configuration కోసం Stored Procedures
+* Processing కోసం Databricks
+* Standard intermediate format గా Avro
+* SSIS components అవసరం లేదు
+
+ఈ architecture flexible గా, scalable గా మరియు multi-year data కి suitable గా design చేయబడింది.
+
 ---
 
 ## 2. Business Requirement
@@ -39,6 +56,23 @@ Create a **cross-year join key** using:
 ```
 Survey_Key = Year + '_' + QID
 ```
+
+**2. Business Requirement (వ్యాపార అవసరం)**
+
+* Survey questions ప్రతి సంవత్సరం మారే అవకాశం ఉంది
+* Survey responses సరైన question text తో తప్పకుండా join అవ్వాలి
+* ఒకే QID వేర్వేరు సంవత్సరాల్లో ఉండే అవకాశం ఉంది
+* అందుకే ఒక reliable మరియు scalable join mechanism అవసరం
+
+---
+
+### **Key Requirement (ముఖ్యమైన అవసరం)**
+
+Cross-year join కోసం ఒక key తయారు చేయాలి:
+
+**Survey_Key = Year + '_' + QID**
+
+ఇలా Year మరియు QID కలిపి unique key తయారు చేస్తే, ప్రతి సంవత్సరం data సరిగా match అవుతుంది మరియు ఎలాంటి confusion ఉండదు.
 
 ---
 
@@ -77,6 +111,24 @@ All ingestion behavior is driven by metadata stored in SQL Server and maintained
 | View Metadata   | Defines business-facing views           |
 
 📌 **No pipeline code changes are required when onboarding new files**.
+
+**4. Control Plane (Metadata Layer) – కంట్రోల్ ప్లేన్**
+
+అన్ని ingestion behavior, **SQL Server** లో ఉన్న metadata ద్వారా control అవుతుంది. ఈ metadata ను stored procedures ద్వారా maintain చేస్తారు.
+
+### **Metadata Components (మెటాడేటా భాగాలు)**
+
+| Component           | Purpose (ఉద్దేశ్యం)                                                |
+| ------------------- | ------------------------------------------------------------------ |
+| **Source System**   | Data ఎక్కడి నుంచి వస్తుందో మరియు ownership ఏది అనేది గుర్తిస్తుంది |
+| **Event Trigger**   | Initial load లేదా incremental load ను control చేస్తుంది            |
+| **File Feed**       | File pattern మరియు load strategy ను define చేస్తుంది               |
+| **Column Metadata** | Table schema మరియు data types ను define చేస్తుంది                  |
+| **View Metadata**   | Business users ఉపయోగించే views ను define చేస్తుంది                 |
+
+📌 కొత్త files onboarding చేయాలంటే pipeline code మార్చాల్సిన అవసరం లేదు — metadata update చేస్తే సరిపోతుంది.
+
+ఇది system ను flexible గా మరియు scalable గా ఉంచుతుంది.
 
 ---
 
