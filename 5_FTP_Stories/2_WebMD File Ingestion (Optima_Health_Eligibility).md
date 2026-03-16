@@ -100,3 +100,78 @@ Before starting, get answers to:
 ---
 
 Would you like help drafting a comment back to the team, writing the technical spec, or building out the FTP/ingestion script logic?
+
+---
+
+సరే! చాలా సింపుల్‌గా చెప్తాను 😊
+
+---
+
+**"The same path is currently used as both the FTP source and the CSC drop location"**
+
+---
+
+అంటే ఏమిటంటే —
+
+ఒక **ఒకే folder** ఉంది:
+`\\corp.ad.sentara.com\shpdfs\ga-internal\WebMD`
+
+ఈ folder రెండు పనులూ చేస్తోంది:
+
+1. **FTP Source** — అంటే WebMD వాళ్ళు తమ files ఇక్కడ **పెడుతున్నారు** (upload చేస్తున్నారు)
+
+2. **CSC Drop Location** — అంటే మన system ఆ files ని ఇక్కడ నుండే **తీసుకుంటోంది** (pick up చేస్తోంది)
+
+---
+
+### సింపుల్ Example తో చెప్పాలంటే:
+
+> ఒక **దుకాణం** ఉంది అనుకో —
+> అదే దుకాణంలో **సరుకు వస్తోంది** కూడా, అదే దుకాణం నుండి **సరుకు వెళ్తోంది** కూడా.
+> రెండూ ఒకే చోట జరుగుతున్నాయి.
+
+---
+
+### కొత్తగా ఏం చేయాలంటే?
+
+ఇప్పుడు మనం ఒక **కొత్త FTP job** create చేయాలి, అది ఆ folder నుండి files తీసుకుని వేరే **కొత్త landing folder** లో పెట్టాలి — అంటే source వేరే, destination వేరే అవుతుంది.
+
+అర్థమైందా? మరింత వివరంగా చెప్పాలా? 😊
+
+---
+## CSC Drop Location అంటే ఏమిటి?
+
+**CSC** అంటే — **Central Storage / Collection point** — అంటే మన system files ని **collect చేసే చోటు**.
+
+---
+
+### సింపుల్గా చెప్పాలంటే:
+
+> ఒక **Post Box** లాంటిది అనుకో —
+> ఎవరైనా letters వేస్తారు → మనం అక్కడ నుండి తీసుకుంటాం.
+> అదే **Drop Location** — అంటే files **drop చేయబడే చోటు.**
+
+---
+
+### IT లో అర్థం:
+
+| Term | అర్థం |
+|---|---|
+| **Drop** | File ని ఒక folder లో పెట్టడం |
+| **Location** | ఆ folder యొక్క path/address |
+| **CSC Drop Location** | మన system (CSC) కోసం files పెట్టే నిర్దిష్టమైన folder |
+
+---
+
+### ఈ Ticket లో చెప్పాలంటే:
+
+- WebMD వాళ్ళు వారి **Eligibility file** ని ఈ folder లో **పెడతారు (drop చేస్తారు)**:
+`\\corp.ad.sentara.com\shpdfs\ga-internal\WebMD`
+
+- మన CSC system అక్కడ నుండి ఆ file ని **తీసుకుని process చేస్తుంది**
+
+---
+
+సింపుల్గా చెప్పాలంటే — **"File వదిలే చోటు"** అని అర్థం! 😊
+
+మరింత అర్థం చేసుకోవాలా?
